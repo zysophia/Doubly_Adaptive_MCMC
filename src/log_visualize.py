@@ -18,9 +18,10 @@ def lineplot_complexity_vs_eps_Voting():
     df_sub = df[(df["chain"]==chain)&(df["beta_max"]==bmax)&(df["true_Q"]>1.37974)&(df["true_Q"]<1.37975)]
     df_sub = df_sub[(df_sub["algorithm"]=="Kolmogorov") | (df_sub["algorithm"]=="parallelGibbs")| (df_sub["algorithm"]=="superGibbs")]
     df_sub["1/$\epsilon$"] = 1/df_sub["epsilon"]
+    df_sub["complexity"] = df_sub["sample_complexity"]
     plt.figure(figsize=(6,5))
     sns.set_theme(style="darkgrid")
-    g = sns.lineplot(x="1/$\epsilon$", y="sample_complexity", hue="algorithm", style = "algorithm", \
+    g = sns.lineplot(x="1/$\epsilon$", y="complexity", hue="algorithm", style = "algorithm", \
         ci=95 ,data=df_sub, markers=True, markersize = 8, dashes=False, linewidth=2, palette=palette) # style = "different_weights", 
     # g.set(ylim=(4, 11))
     g.set_yscale('log')
@@ -35,22 +36,23 @@ def lineplot_complexity_vs_eps_Voting_zoom():
     bmax = 0.1
     chain = "logical"
     weights = 7
-    # df_sub = df[(df["chain"]==chain)&(df["beta_max"]==bmax)&(df["true_Q"]>1.38067)&(df["true_Q"]<1.38068)] # 1.37974, 1.38067, 
-    df_sub = df[(df["chain"]==chain)&(df["beta_max"]==bmax)&(df["true_Q"]>1.37974)&(df["true_Q"]<1.37975)]
+    df_sub = df[(df["chain"]==chain)&(df["beta_max"]==bmax)&(df["true_Q"]>1.38067)&(df["true_Q"]<1.38068)] # 1.37974, 1.38067, 
+    # df_sub = df[(df["chain"]==chain)&(df["beta_max"]==bmax)&(df["true_Q"]>1.37974)&(df["true_Q"]<1.37975)]
     df_sub = df_sub[df_sub["algorithm"]!="Kolmogorov"]
     df_sub["1/$\epsilon$"] = 1/df_sub["epsilon"]
     df_sub["algorithm"].replace({"parallelGibbs (McMcPro)": "parallelGibbs (T$\leftarrow 1$)", "superGibbs (McMcPro)": "superGibbs (T$\leftarrow 1$)"}, inplace=True)
+    df_sub["complexity"] = df_sub["sample_complexity"]
     plt.figure(figsize=(10.5,6))
     
     sns.set_theme(style="darkgrid")
     plt.grid(True,which="both",ls="--",c='gray', alpha=0.5) 
 
-    g = sns.lineplot(x="1/$\epsilon$", y="sample_complexity", hue="algorithm", style = "algorithm", \
+    g = sns.lineplot(x="1/$\epsilon$", y="complexity", hue="algorithm", style = "algorithm", \
         ci=0 ,data=df_sub, markers=True, markersize = 7, dashes=False, linewidth=1.5, palette=palette) 
     # g.set(ylim=(4, 11))
     plt.legend(loc='lower right')
     ax2 = plt.axes([0.14, 0.45, .4, .49], facecolor='gainsboro')
-    sns.lineplot(x="1/$\epsilon$", y="sample_complexity", hue="algorithm", style = "algorithm", \
+    sns.lineplot(x="1/$\epsilon$", y="complexity", hue="algorithm", style = "algorithm", \
         ci=0 ,data=df_sub, markers=True, markersize = 7, dashes=False, linewidth=1.5, palette=palette, ax=ax2, legend=None) 
     ax2.set_yscale('log')
     ax2.set_xscale('log')
@@ -83,7 +85,7 @@ def lineplot_complexity_vs_eps_Voting_zoom():
         )
     )
     plt.show()
-    g.figure.savefig("../figures/complexity_vs_eps_Voting1.png", dpi=200)
+    g.figure.savefig("../figures/complexity_vs_eps_Voting2.png", dpi=200)
 
 
 def scatterplot_complexity_vs_Z_Voting():
@@ -95,9 +97,10 @@ def scatterplot_complexity_vs_Z_Voting():
     nn = 5
     df_sub = df_sub[(df_sub["n"]==nn)]
     df_sub["1/Z"] = 1/(2**nn/df_sub["true_Q"])
+    df_sub["complexity"] = df_sub["sample_complexity"]
     plt.figure(figsize=(4.8,5))
     sns.set_theme(style="darkgrid")
-    g = sns.scatterplot(x="1/Z", y="sample_complexity",  hue = "algorithm", style = "algorithm", ci=95 ,data=df_sub, palette=palette) # style = "different_weights", 
+    g = sns.scatterplot(x="1/Z", y="complexity",  hue = "algorithm", style = "algorithm", ci=95 ,data=df_sub, palette=palette) # style = "different_weights", 
     g.set(xlim=(0.04, 0.05))
     g.set(ylim=(10**5, 10**8))
     g.set_yscale('log')
@@ -115,9 +118,10 @@ def lineplot_complexity_vs_eps_Ising(n=6):
     df_sub = df[(df["chain"]==chain)&(df["n"]==n)]
     # df_sub["log10 (sample complexity)"] = df_sub["sample_complexity"]
     df_sub["1/$\epsilon$"] = 1/df_sub["epsilon"]
+    df_sub["complexity"] = df_sub["sample_complexity"]
     plt.figure(figsize=(5.4, 6))
     sns.set_theme(style="darkgrid")
-    g = sns.lineplot(x="1/$\epsilon$", y="sample_complexity", hue="algorithm", style = "algorithm", \
+    g = sns.lineplot(x="1/$\epsilon$", y="complexity", hue="algorithm", style = "algorithm", \
         ci=95 ,data=df_sub, markers=True, markersize = 8, dashes=False, linewidth=2, palette=palette) # style = "different_weights", 
     # g.set(ylim=(10**5, 10**12))
     g.set_yscale('log')
@@ -137,11 +141,10 @@ def lineplot_error_vs_eps_Voting():
     df_sub = df_sub[(df_sub["algorithm"]=="Kolmogorov") | (df_sub["algorithm"]=="parallelGibbs")| (df_sub["algorithm"]=="superGibbs")]
     df_sub = df_sub[df_sub["epsilon"].isin(epsilons)]
     df_sub["absolute relative error"] = np.abs(df_sub["error"])
-    df_sub["log(1/epsilon)"] = np.log(1/df_sub["epsilon"])
-    print(df_sub)
+    df_sub["$\epsilon$"] = df_sub["epsilon"]
     plt.figure(figsize=(4.8,5))
     sns.set_theme(style="darkgrid")
-    g = sns.lineplot(x="epsilon", y="absolute relative error", hue="algorithm", style = "algorithm", \
+    g = sns.lineplot(x="$\epsilon$", y="absolute relative error", hue="algorithm", style = "algorithm", \
         ci=35 ,data=df_sub, markers=True, dashes=False, palette=palette) # style = "different_weights", 
     # g.set(ylim=(5, 12))
     g.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
@@ -152,14 +155,14 @@ def lineplot_error_vs_eps_Voting():
 
 if __name__ == "__main__":
     
-    lineplot_complexity_vs_eps_Voting()
+    # lineplot_complexity_vs_eps_Voting()
     lineplot_complexity_vs_eps_Voting_zoom()
-    scatterplot_complexity_vs_Z_Voting()
-    lineplot_complexity_vs_eps_Ising(n=2)
-    lineplot_complexity_vs_eps_Ising(n=3)
-    lineplot_complexity_vs_eps_Ising(n=4)
-    lineplot_complexity_vs_eps_Ising(n=6)
-    lineplot_error_vs_eps_Voting()
+    # scatterplot_complexity_vs_Z_Voting()
+    # lineplot_complexity_vs_eps_Ising(n=2)
+    # lineplot_complexity_vs_eps_Ising(n=3)
+    # lineplot_complexity_vs_eps_Ising(n=4)
+    # lineplot_complexity_vs_eps_Ising(n=6)
+    # lineplot_error_vs_eps_Voting()
 
    
 
