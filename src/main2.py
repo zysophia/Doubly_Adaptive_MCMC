@@ -11,17 +11,17 @@ from meanEstimator import *
 from tpa import *
 
 
-log_filename = "../logs/isingoutput.log"
+log_filename = "../logs/isingoutput_v1.log"
 os.makedirs(os.path.dirname(log_filename), exist_ok=True)
 file_handler = logging.FileHandler(log_filename, mode="a", encoding=None, delay=False)
 logging.basicConfig(handlers=[file_handler], level=logging.DEBUG)
 
 logging.info("----- This is a new run -----")
-n = 3
+n = 4
 chain = IsingChainLattice(n = n)
 logging.info("Ising model, n = %d", n)
 
-bmin = -0.01
+bmin = -0.02
 bmax = 0.0
 eps = 0.005
 delta = 0.25

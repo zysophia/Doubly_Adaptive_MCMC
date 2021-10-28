@@ -8,9 +8,10 @@ import matplotlib.patches as patches
 palette ={"Kolmogorov": "darkblue", "parallelGibbs": "darkgreen", "superGibbs": "darkred", \
         "parallelGibbs (T$\leftarrow 1$)": "yellowgreen", "superGibbs (T$\leftarrow 1$)": "darkorange"}
 
+sns.set(font_scale = 5)
 
 def lineplot_complexity_vs_eps_Voting():
-    df = pd.read_csv("../data/compare_complexity.csv")
+    df = pd.read_csv("../data/compare_complexity_v1.csv")
     bmax = 0.1
     chain = "logical"
     weights = 7
@@ -27,16 +28,22 @@ def lineplot_complexity_vs_eps_Voting():
     g.set_yscale('log')
     g.set_xscale('log')
     plt.grid(True,which="both",ls="--",c='gray', alpha=0.5) 
+    
+    g.set_xlabel("1/$\epsilon$",fontsize=15)
+    g.set_ylabel("complexity",fontsize=15)
+    plt.setp(g.get_legend().get_texts(), fontsize='16') # for legend text
+    plt.setp(g.get_legend().get_title(), fontsize='19') # for legend title
+
     plt.show()
-    g.figure.savefig("../figures/complexity_vs_eps_Voting.png", dpi=200)
+    g.figure.savefig("../figures/complexity_vs_eps_Voting_2_v1.png", dpi=200)
 
 
 def lineplot_complexity_vs_eps_Voting_zoom():
-    df = pd.read_csv("../data/compare_complexity.csv")
+    df = pd.read_csv("../data/compare_complexity_v1.csv")
     bmax = 0.1
     chain = "logical"
     weights = 7
-    df_sub = df[(df["chain"]==chain)&(df["beta_max"]==bmax)&(df["true_Q"]>1.38067)&(df["true_Q"]<1.38068)] # 1.37974, 1.38067, 
+    df_sub = df[(df["chain"]==chain)&(df["beta_max"]==bmax)&(df["true_Q"]>1.37974)&(df["true_Q"]<1.37975)] # 1.37974, 1.38067, 
     # df_sub = df[(df["chain"]==chain)&(df["beta_max"]==bmax)&(df["true_Q"]>1.37974)&(df["true_Q"]<1.37975)]
     df_sub = df_sub[df_sub["algorithm"]!="Kolmogorov"]
     df_sub["1/$\epsilon$"] = 1/df_sub["epsilon"]
@@ -84,12 +91,18 @@ def lineplot_complexity_vs_eps_Voting_zoom():
             fill=False
         )
     )
+
+    g.set_xlabel("1/$\epsilon$",fontsize=15)
+    g.set_ylabel("complexity",fontsize=15)
+    plt.setp(g.get_legend().get_texts(), fontsize='16') # for legend text
+    plt.setp(g.get_legend().get_title(), fontsize='19') # for legend title
+
     plt.show()
-    g.figure.savefig("../figures/complexity_vs_eps_Voting2.png", dpi=200)
+    g.figure.savefig("../figures/complexity_vs_eps_Voting_2_v1.png", dpi=200)
 
 
 def scatterplot_complexity_vs_Z_Voting():
-    df = pd.read_csv("../data/compare_complexity.csv")
+    df = pd.read_csv("../data/compare_complexity_v1.csv")
     epss = 0.025
     df_sub = df[(df["epsilon"]==epss) & (df["chain"]=="logical")]
     df_sub = df_sub[(df_sub["algorithm"]=="Kolmogorov") | (df_sub["algorithm"]=="parallelGibbs")| (df_sub["algorithm"]=="superGibbs")]
@@ -108,18 +121,25 @@ def scatterplot_complexity_vs_Z_Voting():
     g.xaxis.set_minor_locator(mticker.LogLocator(base=10, subs=np.arange(0.02,1,0.02), numticks=10))
     g.yaxis.set_minor_locator(mticker.LogLocator(base=10, subs=np.arange(0.1,1,0.1), numticks=10))
     plt.grid(True,which="both",ls="--",c='gray', alpha=0.5)  
+
+    g.set_xlabel("1/Z",fontsize=15)
+    g.set_ylabel("complexity",fontsize=15)
+    plt.setp(g.get_legend().get_texts(), fontsize='16') # for legend text
+    plt.setp(g.get_legend().get_title(), fontsize='19') # for legend title
+
     plt.show()
-    g.figure.savefig("../figures/complexity_vs_Z.png", dpi=200)
+    g.figure.savefig("../figures/complexity_vs_Z_2_v1.png", dpi=200)
 
 
 def lineplot_complexity_vs_eps_Ising(n=6):
-    df = pd.read_csv("../data/isingcompare_complexity.csv")
+    df = pd.read_csv("../data/isingcompare_complexity_v1.csv")
     chain = "Ising"
-    df_sub = df[(df["chain"]==chain)&(df["n"]==n)]
+    df_sub = df[(df["chain"]==chain)&(df["n"]==n)]#&(df["algorithm"]=="Kolmogorov")]
     # df_sub["log10 (sample complexity)"] = df_sub["sample_complexity"]
     df_sub["1/$\epsilon$"] = 1/df_sub["epsilon"]
     df_sub["complexity"] = df_sub["sample_complexity"]
-    plt.figure(figsize=(5.4, 6))
+    plt.figure(figsize=(5.4, 5.5))
+    # plt.figure(figsize=(4.8,5.8))
     sns.set_theme(style="darkgrid")
     g = sns.lineplot(x="1/$\epsilon$", y="complexity", hue="algorithm", style = "algorithm", \
         ci=95 ,data=df_sub, markers=True, markersize = 8, dashes=False, linewidth=2, palette=palette) # style = "different_weights", 
@@ -127,12 +147,18 @@ def lineplot_complexity_vs_eps_Ising(n=6):
     g.set_yscale('log')
     g.set_xscale('log')
     plt.grid(True,which="both",ls="--",c='gray', alpha=0.5)  
+
+    g.set_xlabel("1/$\epsilon$",fontsize=15)
+    g.set_ylabel("complexity",fontsize=15)
+    plt.setp(g.get_legend().get_texts(), fontsize='16') # for legend text
+    plt.setp(g.get_legend().get_title(), fontsize='19') # for legend title
+
     plt.show()
-    g.figure.savefig(f"../figures/complexity_vs_eps_Ising{n}.png", dpi=200)
+    g.figure.savefig(f"../figures/complexity_vs_eps_Ising{n}_2_v1.png", dpi=200)
 
 
 def lineplot_error_vs_eps_Voting():
-    df = pd.read_csv("../data/compare_complexity.csv")
+    df = pd.read_csv("../data/compare_complexity_v1.csv")
     chain = "logical"
     n = 3
     epsilons = [0.1, 0.075, 0.05, 0.04, 0.025, 0.01]
@@ -142,7 +168,8 @@ def lineplot_error_vs_eps_Voting():
     df_sub = df_sub[df_sub["epsilon"].isin(epsilons)]
     df_sub["absolute relative error"] = np.abs(df_sub["error"])
     df_sub["$\epsilon$"] = df_sub["epsilon"]
-    plt.figure(figsize=(4.8,5))
+    # plt.figure(figsize=(4.8,5))
+    plt.figure(figsize=(5.4,5.5))
     sns.set_theme(style="darkgrid")
     g = sns.lineplot(x="$\epsilon$", y="absolute relative error", hue="algorithm", style = "algorithm", \
         ci=35 ,data=df_sub, markers=True, dashes=False, palette=palette) # style = "different_weights", 
@@ -150,17 +177,23 @@ def lineplot_error_vs_eps_Voting():
     g.ticklabel_format(axis="y", style="sci", scilimits=(0,0))
     g.invert_xaxis()
     plt.grid(True,which="both",ls="--",c='gray', alpha=0.5)
+
+    g.set_xlabel("$\epsilon$",fontsize=15)
+    g.set_ylabel("absolute relative error",fontsize=15)
+    plt.setp(g.get_legend().get_texts(), fontsize='16') # for legend text
+    plt.setp(g.get_legend().get_title(), fontsize='19') # for legend title
+
     plt.show()
-    g.figure.savefig("../figures/error_vs_epsilon.png", dpi=200)
+    g.figure.savefig("../figures/error_vs_epsilon_2_v1.png", dpi=200)
 
 if __name__ == "__main__":
     
-    # lineplot_complexity_vs_eps_Voting()
+    lineplot_complexity_vs_eps_Voting()
     lineplot_complexity_vs_eps_Voting_zoom()
     # scatterplot_complexity_vs_Z_Voting()
-    # lineplot_complexity_vs_eps_Ising(n=2)
-    # lineplot_complexity_vs_eps_Ising(n=3)
-    # lineplot_complexity_vs_eps_Ising(n=4)
+    lineplot_complexity_vs_eps_Ising(n=2)
+    lineplot_complexity_vs_eps_Ising(n=3)
+    lineplot_complexity_vs_eps_Ising(n=4)
     # lineplot_complexity_vs_eps_Ising(n=6)
     # lineplot_error_vs_eps_Voting()
 

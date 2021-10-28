@@ -11,15 +11,15 @@ from meanEstimator import *
 from tpa import *
 
 
-log_filename = "../logs/output.log"
+log_filename = "../logs/output_v1.log"
 os.makedirs(os.path.dirname(log_filename), exist_ok=True)
 file_handler = logging.FileHandler(log_filename, mode="a", encoding=None, delay=False)
 logging.basicConfig(handlers=[file_handler], level=logging.DEBUG)
 
 n = 3
 w = 0.9# int(rng.uniform(-1, 1)*10)/10#0.9 # rng.random()
-wt = [0.5]*n# [int(x)/10 for x in rng.uniform(-1.0, 1.0, size = n//2)*10] #[0.2, 0.5, 0.1]#[0.1]*n #[0.9, 0.9, -0.1, -0.1, -0.5] # rng.random(n)
-wf = [-0.4]*n# [int(x)/10 for x in rng.uniform(-1.0, 1.0, size = n//2)*10] #[-0.8, -0.2, -0.9]#[-0.8]*n #[-0.8, -0.8, -0.3, -0.3, -0.9] #rng.random(n)
+wt = [0.2, 0.5, 0.1] #[0.5]*n# [int(x)/10 for x in rng.uniform(-1.0, 1.0, size = n//2)*10] #[0.2, 0.5, 0.1]#[0.1]*n #[0.9, 0.9, -0.1, -0.1, -0.5] # rng.random(n)
+wf = [-0.8, -0.2, -0.9] #[-0.4]*n# [int(x)/10 for x in rng.uniform(-1.0, 1.0, size = n//2)*10] #[-0.8, -0.2, -0.9]#[-0.8]*n #[-0.8, -0.8, -0.3, -0.3, -0.9] #rng.random(n)
 
 logging.info("----- This is a new run -----")
 
@@ -51,7 +51,7 @@ tvd = kappa/ (k*q)
 res = TPA_k_d(bmin, bmax, k, dist, chain, tvd)
 schedule, TPAsteps = res["schedule"], res["steps"]
 
-for eps in [0.25, 0.1, 0.075, 0.05, 0.04, 0.025, 0.01]:#, 0.0075, 0.005, 0.0025, 0.001, 0.0005]:
+for eps in [0.25, 0.1, 0.075, 0.05, 0.025, 0.01, 0.0075, 0.005, 0.0025, 0.001, 0.0005]:
 
     logging.info("parameters: bmin = %.2f, bmax = %.2f, eps = %.4f, delta = %.2f, kappa = %.2f", \
         bmin, bmax, eps, delta, kappa)

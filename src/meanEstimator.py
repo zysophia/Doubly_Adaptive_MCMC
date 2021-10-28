@@ -55,10 +55,11 @@ def mean_estimator(gibbsChain, f, e, d, a, b, use_trace):
             R * np.sqrt( (1+Lambda)/(1-Lambda) * empirical_tv * ln3Id / mi )
         bernstein_bound = 10*R*ln3Id/(1-Lambda)/mi + np.sqrt( (1+Lambda)/(1-Lambda) * variance_upper * ln3Id / mi )
         correction_mean = (max(a, empirical_mean-bernstein_bound) + min(b, empirical_mean+bernstein_bound))/2
-        correction_error = (min(b, empirical_mean+bernstein_bound) - max(a, empirical_mean-bernstein_bound))/2
+        correction_error = (min(b, empirical_mean+bernstein_bound) - max(a, empirical_mean-bernstein_bound))/2/correction_mean # relative error
+        # correction_error = (min(b, empirical_mean+bernstein_bound) - max(a, empirical_mean-bernstein_bound))/2# additive error
         m = mi
         print("mi=", mi, "tv =", empirical_tv, "variance_upper", variance_upper, "bernstein", bernstein_bound)
         if i==I or correction_error<=e:
-            print("done, I =", I, "i =", i, e, correction_error)
+            print("done, I =", I, "i =", i, e, correction_error, correction_mean)
             return {"mean_value" : correction_mean, "steps": T*mi}
 
