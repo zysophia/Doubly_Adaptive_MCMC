@@ -114,7 +114,7 @@ def scatterplot_complexity_vs_Z_Voting():
     plt.figure(figsize=(4.8,5))
     sns.set_theme(style="darkgrid")
     g = sns.scatterplot(x="1/Z", y="complexity",  hue = "algorithm", style = "algorithm", ci=95 ,data=df_sub, palette=palette) # style = "different_weights", 
-    g.set(xlim=(0.04, 0.05))
+    g.set(xlim=(0.041, 0.051))
     g.set(ylim=(10**5, 10**8))
     g.set_yscale('log')
     g.set_xscale('log')
@@ -190,12 +190,12 @@ if __name__ == "__main__":
     
     lineplot_complexity_vs_eps_Voting()
     lineplot_complexity_vs_eps_Voting_zoom()
-    # scatterplot_complexity_vs_Z_Voting()
+    scatterplot_complexity_vs_Z_Voting()
     lineplot_complexity_vs_eps_Ising(n=2)
     lineplot_complexity_vs_eps_Ising(n=3)
     lineplot_complexity_vs_eps_Ising(n=4)
-    # lineplot_complexity_vs_eps_Ising(n=6)
-    # lineplot_error_vs_eps_Voting()
+    lineplot_complexity_vs_eps_Ising(n=6)
+    lineplot_error_vs_eps_Voting()
 
    
 
